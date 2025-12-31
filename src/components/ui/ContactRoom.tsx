@@ -14,6 +14,7 @@ interface ContactRoomProps {
 
 export default function ContactRoom({ isOpen, onClose, contact }: ContactRoomProps) {
     const [message, setMessage] = useState('');
+    const [activeTab, setActiveTab] = useState<'feed' | 'chat'>('feed');
 
     if (!contact) return null;
 
@@ -51,68 +52,93 @@ export default function ContactRoom({ isOpen, onClose, contact }: ContactRoomPro
                         className="relative w-full max-w-6xl h-full max-h-[850px] bg-[#f8f8fa] rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col pointer-events-auto border border-white/20"
                     >
                         {/* Header */}
-                        <div className="px-10 py-8 bg-white border-b border-black/5 flex items-center justify-between shrink-0">
-                            <div className="flex items-center gap-6">
+                        <div className="px-6 lg:px-10 py-6 lg:py-8 bg-white border-b border-black/5 flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-4 lg:gap-6">
                                 <div className={twMerge(
-                                    "w-16 h-16 rounded-[1.5rem] p-0.5 border-2 relative",
+                                    "w-12 h-12 lg:w-16 lg:h-16 rounded-[1.2rem] lg:rounded-[1.5rem] p-0.5 border-2 relative",
                                     contact.tier === 'verified' ? "border-cyan-500" : contact.tier === 'influencer' ? "border-yellow-400" : "border-green-500"
                                 )}>
-                                    <img src={contact.avatar} className="w-full h-full object-cover rounded-[1.3rem]" alt={contact.name} />
-                                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-4 border-white rounded-full shadow-sm" />
+                                    <img src={contact.avatar} className="w-full h-full object-cover rounded-[1rem] lg:rounded-[1.3rem]" alt={contact.name} />
+                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-black text-black uppercase tracking-tighter flex items-center gap-2 leading-none mb-2">
+                                    <h3 className="text-lg lg:text-xl font-black text-black uppercase tracking-tighter flex items-center gap-2 leading-none mb-1 lg:mb-2">
                                         {contact.name}
-                                        {contact.tier === 'verified' && <ShieldCheck size={18} className="text-cyan-500" />}
+                                        {contact.tier === 'verified' && <ShieldCheck size={16} className="text-cyan-500" />}
                                     </h3>
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-[10px] font-black text-black/30 uppercase tracking-widest">{contact.handle}</span>
+                                    <div className="flex items-center gap-2 lg:gap-3">
+                                        <span className="text-[9px] lg:text-[10px] font-black text-black/30 uppercase tracking-widest">{contact.handle}</span>
                                         <span className="w-1 h-1 rounded-full bg-black/10" />
-                                        <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">Active Now</span>
+                                        <span className="text-[9px] lg:text-[10px] font-black text-green-500 uppercase tracking-widest">Active</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <button className="p-4 rounded-2xl bg-gray-50 text-black/40 hover:text-black hover:bg-gray-100 transition-all">
-                                    <MoreHorizontal size={20} />
+                            <div className="flex items-center gap-2 lg:gap-4">
+                                <button className="p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-gray-50 text-black/40 hover:text-black hover:bg-gray-100 transition-all">
+                                    <MoreHorizontal size={18} />
                                 </button>
                                 <button
                                     onClick={onClose}
-                                    className="p-4 rounded-2xl bg-black text-white hover:bg-cyan-600 transition-all shadow-xl shadow-black/10"
+                                    className="p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-black text-white hover:bg-cyan-600 transition-all shadow-xl shadow-black/10"
                                 >
-                                    <X size={20} />
+                                    <X size={18} />
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Mobile Tab Switcher */}
+                        <div className="lg:hidden flex bg-white border-b border-black/5 p-2 gap-2">
+                            <button
+                                onClick={() => setActiveTab('feed')}
+                                className={twMerge(
+                                    "flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                    activeTab === 'feed' ? "bg-black text-white" : "text-black/30 bg-black/5"
+                                )}
+                            >
+                                Private Feed
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('chat')}
+                                className={twMerge(
+                                    "flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
+                                    activeTab === 'chat' ? "bg-black text-white" : "text-black/30 bg-black/5"
+                                )}
+                            >
+                                Secure Chat
+                            </button>
                         </div>
 
                         {/* Split Body */}
                         <div className="flex-1 flex overflow-hidden">
                             {/* LEFT PANEL: User Feed */}
-                            <div className="w-[45%] border-r border-black/5 flex flex-col bg-white/40 backdrop-blur-xl">
-                                <div className="p-8 border-b border-black/5 flex items-center justify-between">
+                            <div className={twMerge(
+                                "lg:w-[45%] w-full border-r border-black/5 flex flex-col bg-white/40 backdrop-blur-xl transition-all duration-300",
+                                activeTab === 'chat' ? "hidden lg:flex" : "flex"
+                            )}>
+                                <div className="p-6 lg:p-8 border-b border-black/5 flex items-center justify-between hidden lg:flex">
                                     <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-black">Private Feed</h4>
                                     <span className="px-3 py-1 bg-black/5 rounded-lg text-[9px] font-black uppercase tracking-widest text-black/40">Exclusive</span>
                                 </div>
-                                <div className="flex-1 overflow-y-auto p-8 no-scrollbar space-y-8">
+                                <div className="flex-1 overflow-y-auto p-6 lg:p-8 no-scrollbar space-y-6 lg:space-y-8">
                                     {MOCK_POSTS.map(post => (
-                                        <div key={post.id} className="bg-white/60 backdrop-blur-md rounded-[2.5rem] border border-white/40 overflow-hidden shadow-sm hover:shadow-xl transition-all group cursor-pointer">
+                                        <div key={post.id} className="bg-white/60 backdrop-blur-md rounded-[2rem] lg:rounded-[2.5rem] border border-white/40 overflow-hidden shadow-sm hover:shadow-xl transition-all group cursor-pointer">
                                             <div className="aspect-square relative flex items-center justify-center bg-gray-50 overflow-hidden">
                                                 <img src={post.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Post" />
                                                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                             </div>
-                                            <div className="p-6 flex items-center justify-between">
-                                                <div className="flex items-center gap-6">
+                                            <div className="p-4 lg:p-6 flex items-center justify-between">
+                                                <div className="flex items-center gap-4 lg:gap-6">
                                                     <div className="flex items-center gap-2 text-black/30 group-hover:text-pink-500 transition-colors">
-                                                        <Heart size={16} fill={post.id === 1 ? 'currentColor' : 'none'} className={post.id === 1 ? 'text-pink-500' : ''} />
-                                                        <span className="text-[10px] font-black">{post.likes}</span>
+                                                        <Heart size={14} fill={post.id === 1 ? 'currentColor' : 'none'} className={post.id === 1 ? 'text-pink-500' : ''} />
+                                                        <span className="text-[9px] font-black">{post.likes}</span>
                                                     </div>
                                                     <div className="flex items-center gap-2 text-black/30 group-hover:text-cyan-600 transition-colors">
-                                                        <MessageCircle size={16} />
-                                                        <span className="text-[10px] font-black">{post.comments}</span>
+                                                        <MessageCircle size={14} />
+                                                        <span className="text-[9px] font-black">{post.comments}</span>
                                                     </div>
                                                 </div>
-                                                <Share2 size={16} className="text-black/10 group-hover:text-black transition-colors" />
+                                                <Share2 size={14} className="text-black/10 group-hover:text-black transition-colors" />
                                             </div>
                                         </div>
                                     ))}
@@ -120,8 +146,11 @@ export default function ContactRoom({ isOpen, onClose, contact }: ContactRoomPro
                             </div>
 
                             {/* RIGHT PANEL: Chat */}
-                            <div className="flex-1 flex flex-col bg-white/20 backdrop-blur-3xl">
-                                <div className="p-8 border-b border-black/5 flex items-center justify-between">
+                            <div className={twMerge(
+                                "flex-1 flex flex-col bg-white/20 backdrop-blur-3xl transition-all duration-300",
+                                activeTab === 'feed' ? "hidden lg:flex" : "flex"
+                            )}>
+                                <div className="p-6 lg:p-8 border-b border-black/5 flex items-center justify-between hidden lg:flex">
                                     <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-black/60">Secure Transmission</h4>
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
@@ -130,9 +159,9 @@ export default function ContactRoom({ isOpen, onClose, contact }: ContactRoomPro
                                 </div>
 
                                 {/* Messages */}
-                                <div className="flex-1 overflow-y-auto p-10 no-scrollbar space-y-3 flex flex-col">
-                                    <div className="text-center mb-6">
-                                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-black/20">Yesterday</span>
+                                <div className="flex-1 overflow-y-auto p-6 lg:p-10 no-scrollbar space-y-3 flex flex-col">
+                                    <div className="text-center mb-4 lg:mb-6">
+                                        <span className="text-[8px] lg:text-[9px] font-black uppercase tracking-[0.3em] text-black/20">Yesterday</span>
                                     </div>
                                     {MOCK_MESSAGES.map(msg => (
                                         <div

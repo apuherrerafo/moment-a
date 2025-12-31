@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react';
 import { useMoments, Moment, Influencer } from '@/hooks/useMoments';
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ShoppingCart, Star, Gift, Crown, Info, Lock, Play, ChevronDown, Heart, MessageSquare, Terminal, Ticket, UserCheck, Share2, MoreHorizontal } from 'lucide-react';
+import { ShoppingCart, Star, Gift, Crown, Info, Lock, Play, ChevronDown, Heart, MessageSquare, Terminal, Ticket, UserCheck, Share2, MoreHorizontal, ArrowRight, X } from 'lucide-react';
 import ContactRoom from '@/components/ui/ContactRoom';
 import RaffleConsole from '@/components/ui/RaffleConsole';
 import LoginLauncher from '@/components/auth/LoginLauncher';
@@ -31,6 +31,10 @@ export default function Home() {
   const [isLiveOpen, setIsLiveOpen] = useState(false);
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const [isPostDetail, setIsPostDetail] = useState(false);
+
+  // Sidebar States
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
 
   // Payment Flow State
   const [walletBalance, setWalletBalance] = useState(420);
@@ -151,7 +155,7 @@ export default function Home() {
           {/* Header Controls - Improved for Mobile */}
           <div className="absolute top-6 lg:top-12 left-0 right-0 z-20 px-6 flex items-center justify-center pointer-events-none">
             <div className="flex items-center gap-3 w-full max-w-2xl pointer-events-auto">
-              <div className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/20 rounded-full shadow-2xl">
+              <div className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/20 rounded-full shadow-2xl overflow-hidden">
                 <SearchBar onLocationSelect={handleLocationSelect} />
               </div>
               <div className="flex-shrink-0">
@@ -160,17 +164,53 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Mobile Sidebar Toggles */}
+          <div className="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-30">
+            <button
+              onClick={() => setIsLeftSidebarOpen(true)}
+              className="w-8 h-16 bg-white/40 backdrop-blur-xl border border-white/20 rounded-r-2xl flex items-center justify-center shadow-xl text-black/40 hover:text-black transition-all"
+            >
+              <ArrowRight size={14} />
+            </button>
+          </div>
+
+          <div className="xl:hidden fixed right-0 top-1/2 -translate-y-1/2 z-30">
+            <button
+              onClick={() => setIsRightSidebarOpen(true)}
+              className="w-8 h-16 bg-white/40 backdrop-blur-xl border border-white/20 rounded-l-2xl flex items-center justify-center shadow-xl text-black/40 hover:text-black transition-all"
+            >
+              <ArrowRight size={14} className="rotate-180" />
+            </button>
+          </div>
+
           <div className="relative z-10 h-full w-full">
             <div className="h-full w-full bg-white/40 backdrop-blur-xl lg:border border-none border-white/20 lg:rounded-[4rem] rounded-none shadow-[0_40px_100px_-20px_rgba(0,0,0,0.12)] flex overflow-hidden">
-              <div className="hidden lg:block w-64 h-full border-r border-white/20 bg-white/30 backdrop-blur-md">
-                <TrendingSorteos
-                  sorteos={moments}
-                  onSelect={(m) => {
-                    setSelectedMoment(m);
-                    setFocusLocation({ x: m.x, y: m.y });
-                  }}
-                />
-              </div>
+
+              {/* Left Sidebar - Trending */}
+              <motion.div
+                className={twMerge(
+                  "fixed lg:relative z-40 h-full w-72 border-r border-white/20 bg-white/80 backdrop-blur-3xl lg:bg-white/30 transition-transform duration-500",
+                  "lg:translate-x-0",
+                  isLeftSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                )}
+              >
+                <div className="h-full relative overflow-y-auto no-scrollbar">
+                  <TrendingSorteos
+                    sorteos={moments}
+                    onSelect={(m) => {
+                      setSelectedMoment(m);
+                      setFocusLocation({ x: m.x, y: m.y });
+                      setIsLeftSidebarOpen(false);
+                    }}
+                  />
+                  <button
+                    onClick={() => setIsLeftSidebarOpen(false)}
+                    className="lg:hidden absolute top-4 right-4 p-2 bg-black/5 rounded-full"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </motion.div>
 
               <div className="flex-1 h-full relative bg-transparent">
                 <div className="absolute inset-0 z-0">
@@ -194,15 +234,31 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="hidden xl:block w-80 h-full border-l border-white/20 bg-white/30 backdrop-blur-md">
-                <CommunityFeed
-                  unlockedMoments={moments.filter(m => unlockedMomentIds.includes(m.id))}
-                  onMomentSelect={(m) => {
-                    setSelectedMoment(m);
-                    setActiveTab('info');
-                  }}
-                />
-              </div>
+              {/* Right Sidebar - Feed */}
+              <motion.div
+                className={twMerge(
+                  "fixed lg:relative right-0 z-40 h-full w-80 border-l border-white/20 bg-white/80 backdrop-blur-3xl lg:bg-white/30 transition-transform duration-500",
+                  "xl:translate-x-0",
+                  isRightSidebarOpen ? "translate-x-0" : "translate-x-full xl:translate-x-0"
+                )}
+              >
+                <div className="h-full relative overflow-y-auto no-scrollbar">
+                  <CommunityFeed
+                    unlockedMoments={moments.filter(m => unlockedMomentIds.includes(m.id))}
+                    onMomentSelect={(m) => {
+                      setSelectedMoment(m);
+                      setActiveTab('info');
+                      setIsRightSidebarOpen(false);
+                    }}
+                  />
+                  <button
+                    onClick={() => setIsRightSidebarOpen(false)}
+                    className="xl:hidden absolute top-4 left-4 p-2 bg-black/5 rounded-full"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </motion.div>
             </div>
           </div>
 
