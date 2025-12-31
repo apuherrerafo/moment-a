@@ -70,7 +70,7 @@ const TIERS: TierProps[] = [
 
 export default function MembershipTiers({ onSubscribe }: { onSubscribe: (tier: string) => void }) {
     return (
-        <div className="w-full h-full overflow-y-auto no-scrollbar py-12 px-6 lg:px-12 bg-white/10 backdrop-blur-3xl rounded-[3rem]">
+        <div className="w-full h-full overflow-y-auto no-scrollbar py-6 px-0 rounded-[3rem]">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.span
@@ -84,7 +84,7 @@ export default function MembershipTiers({ onSubscribe }: { onSubscribe: (tier: s
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl lg:text-5xl font-black text-black uppercase tracking-tighter mb-4"
+                        className="text-4xl lg:text-5xl font-black text-black uppercase tracking-tight mb-4"
                     >
                         Membership <span className="text-purple-600">Tiers</span>
                     </motion.h2>
@@ -98,7 +98,7 @@ export default function MembershipTiers({ onSubscribe }: { onSubscribe: (tier: s
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-6">
                     {TIERS.map((tier, idx) => (
                         <motion.div
                             key={tier.id}
@@ -106,7 +106,7 @@ export default function MembershipTiers({ onSubscribe }: { onSubscribe: (tier: s
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 * idx, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
                             className={twMerge(
-                                "relative p-8 lg:p-10 rounded-[3rem] bg-white border-2 border-transparent transition-all duration-500 flex flex-col h-full",
+                                "relative p-8 lg:p-8 rounded-[3rem] bg-white border-2 border-transparent transition-all duration-500 flex flex-col h-full",
                                 tier.popular
                                     ? "border-purple-500/30 shadow-[0_40px_80px_-15px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/10"
                                     : "border-black/5 shadow-xl shadow-black/5",
@@ -128,7 +128,7 @@ export default function MembershipTiers({ onSubscribe }: { onSubscribe: (tier: s
                                 )}>
                                     {tier.icon}
                                 </div>
-                                <h3 className="text-2xl font-black text-black uppercase tracking-tighter mb-2">{tier.name}</h3>
+                                <h3 className="text-2xl font-black text-black uppercase tracking-tight mb-2">{tier.name}</h3>
                                 <div className="flex items-baseline gap-1">
                                     <span className="text-4xl font-black text-black tracking-tighter">${tier.price}</span>
                                     <span className="text-[10px] font-black text-black/20 uppercase tracking-widest">/mo</span>

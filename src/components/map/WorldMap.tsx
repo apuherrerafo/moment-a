@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Moment, Influencer } from '@/hooks/useMoments';
 import { motion, AnimatePresence } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
+import { ShoppingCart, Zap, Gift } from 'lucide-react';
 
 interface WorldMapProps {
   moments?: Moment[];
@@ -117,18 +118,71 @@ export default function WorldMap({
           ))}
         </svg>
 
+        {/* Moments Layer (Icons/Hotspots) */}
+        <AnimatePresence>
+          {moments.map((moment, idx) => {
+            const isShop = moment.type === 'Shop';
+            const isGiveaway = moment.isGiveaway;
+
+            return (
+              <motion.div
+                key={moment.id}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                whileHover={{ scale: 1.2, zIndex: 100 }}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10"
+                style={{ left: `${moment.x}%`, top: `${moment.y}%` }}
+                onClick={() => onMomentSelect?.(moment)}
+              >
+                <div className="relative group/moment">
+                  <div className={twMerge(
+                    "w-10 h-10 rounded-2xl flex items-center justify-center shadow-2xl border-2 transition-all duration-300",
+                    isShop
+                      ? "bg-yellow-400 border-yellow-500 text-black shadow-yellow-400/20"
+                      : "bg-black border-white/10 text-white shadow-black/20"
+                  )}>
+                    {isShop ? <ShoppingCart size={18} /> : <Zap size={18} fill="currentColor" />}
+
+                    {/* Giveaway Badge */}
+                    {isGiveaway && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center text-white border-2 border-white shadow-lg animate-bounce">
+                        <Gift size={10} strokeWidth={3} />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Subtle Radar Ripple */}
+                  <div className={twMerge(
+                    "absolute inset-0 rounded-2xl animate-ping opacity-20",
+                    isShop ? "bg-yellow-400" : "bg-cyan-400"
+                  )} style={{ animationDuration: '3s' }} />
+
+                  {/* Label on Hover */}
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover/moment:opacity-100 transition-all bg-black px-2 py-1 rounded text-[7px] font-black uppercase tracking-widest text-white whitespace-nowrap">
+                    {moment.title}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+
         {/* Profiles / Ecosystem Inhabitants */}
         <AnimatePresence>
           {influencers.map((inf, idx) => {
             const connectedMoments = moments.filter(m => m.influencerId === inf.id);
             const isVerified = inf.tier === 'verified';
+            const isLive = inf.isLive;
 
             // Tier based styling
+            const isFriend = inf.tier === 'friend';
             const borderColor = isVerified
               ? 'border-yellow-400'
               : inf.tier === 'influencer'
                 ? 'border-cyan-500'
-                : 'border-white';
+                : isFriend
+                  ? 'border-green-500'
+                  : 'border-white';
 
             return (
               <motion.div
@@ -146,13 +200,7 @@ export default function WorldMap({
                 whileHover={{ scale: 1.1, zIndex: 110 }}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 group"
                 style={{ left: `${inf.x}%`, top: `${inf.y}%` }}
-                onClick={() => {
-                  if (connectedMoments.length > 0) {
-                    onMomentSelect?.(connectedMoments[0]);
-                  } else {
-                    onInfluencerSelect?.(inf);
-                  }
-                }}
+                onClick={() => onInfluencerSelect?.(inf)}
               >
                 <div className="relative">
                   {/* GOLD GLOW INTERMITTENTE (Premium Subscription Effect) */}
@@ -166,11 +214,13 @@ export default function WorldMap({
                   <div className={twMerge(
                     "w-16 h-16 rounded-full border-4 shadow-2xl transition-all duration-500 bg-white p-0.5 relative z-10",
                     borderColor,
-                    isVerified && "shadow-[0_0_40px_rgba(250,204,21,0.6)] border-yellow-400"
+                    isVerified && "shadow-[0_0_40px_rgba(250,204,21,0.6)] border-yellow-400",
+                    isFriend && "shadow-[0_0_30px_rgba(34,197,94,0.3)]",
+                    isLive && "border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.5)]"
                   )}>
                     <img src={inf.avatar} className="w-full h-full object-cover rounded-full" alt={inf.name} />
 
-                    {/* Intermittent Sparkle */}
+                    {/* Intermittent Sparkle / Live Indicator */}
                     {isVerified && (
                       <motion.div
                         animate={{ opacity: [0, 1, 0] }}
@@ -182,9 +232,14 @@ export default function WorldMap({
                     )}
                   </div>
 
-                  {/* Badges / Interactions Count */}
-                  <div className="absolute -top-2 -right-2 bg-black text-white px-2 py-0.5 rounded-lg text-[8px] font-black uppercase z-20 border border-white/20">
-                    {connectedMoments.length > 0 ? 'Live' : 'Feed'}
+                  {/* LIVE / FEED BADGE */}
+                  <div className={twMerge(
+                    "absolute -top-2 -right-2 px-2 py-0.5 rounded-lg text-[8px] font-black uppercase z-20 border border-white/20 shadow-lg transition-colors",
+                    isLive
+                      ? "bg-red-500 text-white animate-[pulse_1s_infinite]"
+                      : "bg-black text-white"
+                  )}>
+                    {isLive ? 'LIVE' : 'FEED'}
                   </div>
 
                   {/* Label */}

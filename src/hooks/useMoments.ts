@@ -24,6 +24,7 @@ export interface Influencer {
     tier: 'verified' | 'influencer' | 'friend'; // Updated tiers
     x: number;
     y: number;
+    isLive?: boolean;
 }
 
 export interface Moment {
@@ -58,11 +59,11 @@ export interface Moment {
 }
 
 export const MOCK_INFLUENCERS: Influencer[] = [
-    { id: 'i1', name: 'Andy Merino', handle: '@andymns', avatar: 'https://i.pravatar.cc/150?u=i1', tier: 'verified', x: 40, y: 30 },
+    { id: 'i1', name: 'Andy Merino', handle: '@andymns', avatar: 'https://i.pravatar.cc/150?u=i1', tier: 'verified', x: 40, y: 30, isLive: true },
     { id: 'i2', name: 'Marcelo Wong', handle: '@marcelowong', avatar: 'https://i.pravatar.cc/150?u=i2', tier: 'verified', x: 52, y: 48 },
     { id: 'i3', name: 'Punk 420', handle: '@punk420', avatar: 'https://i.pravatar.cc/150?u=i3', tier: 'influencer', x: 44, y: 34 },
     { id: 'i4', name: 'Jazz Queen', handle: '@jazzqueen', avatar: 'https://i.pravatar.cc/150?u=i4', tier: 'influencer', x: 56, y: 62 },
-    { id: 'i5', name: 'Tech Master', handle: '@techmaster', avatar: 'https://i.pravatar.cc/150?u=i5', tier: 'verified', x: 24, y: 44 },
+    { id: 'i5', name: 'Tech Master', handle: '@techmaster', avatar: 'https://i.pravatar.cc/150?u=i5', tier: 'verified', x: 24, y: 44, isLive: true },
     { id: 'i6', name: 'Vibe Curator', handle: '@vibecurator', avatar: 'https://i.pravatar.cc/150?u=i6', tier: 'influencer', x: 47, y: 53 },
     { id: 'i7', name: 'Crypto King', handle: '@cryptoking', avatar: 'https://i.pravatar.cc/150?u=i7', tier: 'verified', x: 30, y: 25 },
     { id: 'i8', name: 'Sofia Lima', handle: '@sofialima', avatar: 'https://i.pravatar.cc/150?u=i8', tier: 'friend', x: 60, y: 40 },
@@ -191,6 +192,7 @@ const MOCK_MOMENTS: Moment[] = [
         realPhotoUrl: '/host-real.png',
         influencerId: 'i5',
         influencer: '@TechMaster',
+        description: "Join the most exclusive Web3 & AI founders gathering in Lima. We're discussing the future of agentic coding and decentralized ecosystems. Desbloquea para participar en la cena exclusiva.",
         capacity: { current: 55, max: 80 },
         attendees: [
             { name: 'Frank', avatar: '/avatar-host.png' }
@@ -202,6 +204,7 @@ const MOCK_MOMENTS: Moment[] = [
         y: 45,
         zone: 'San Isidro',
         tags: ['Tech', 'Startup', 'Live'],
+        raffleDate: '2026-01-10T20:00:00',
         unlockedImageUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=1000&auto=format&fit=crop'
     },
     {

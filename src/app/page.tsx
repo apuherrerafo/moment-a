@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react';
 import { useMoments, Moment, Influencer } from '@/hooks/useMoments';
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ShoppingCart, Star, Gift, Crown, Info, Lock, Play, ChevronDown, Heart, MessageSquare, Terminal, Ticket, UserCheck, Share2, MoreHorizontal, ArrowRight, X } from 'lucide-react';
+import { ShoppingCart, Star, Gift, Crown, Info, Lock, Play, ChevronDown, Heart, MessageSquare, Terminal, Ticket, UserCheck, Share2, MoreHorizontal, ArrowRight, X, Zap } from 'lucide-react';
 import ContactRoom from '@/components/ui/ContactRoom';
 import RaffleConsole from '@/components/ui/RaffleConsole';
 import LoginLauncher from '@/components/auth/LoginLauncher';
@@ -157,9 +157,7 @@ export default function Home() {
           {/* Header Controls - Improved for Mobile */}
           <div className="absolute top-6 lg:top-12 left-0 right-0 z-20 px-6 flex items-center justify-center pointer-events-none">
             <div className="flex items-center gap-3 w-full max-w-xl pointer-events-auto">
-              <div className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/20 rounded-full shadow-2xl overflow-hidden">
-                <SearchBar onLocationSelect={handleLocationSelect} />
-              </div>
+              <SearchBar onLocationSelect={handleLocationSelect} />
             </div>
           </div>
 
@@ -483,8 +481,8 @@ export default function Home() {
                         />
                         <div className="absolute top-6 left-6 flex flex-col gap-3">
                           <div className="flex items-center gap-2.5 px-4 py-2 bg-yellow-400 text-black rounded-full font-black text-[9px] uppercase tracking-widest shadow-xl border border-yellow-500/20">
-                            <Gift size={14} />
-                            {selectedMoment.raffleDate ? `SORTEO 05.01 1:00PM` : `SORTEO ACTIVO`}
+                            <Zap size={14} fill="currentColor" />
+                            {selectedMoment.raffleDate ? `MOMENTO 05.01 1:00PM` : `MOMENTO ACTIVO`}
                           </div>
                           {timeLeft && (
                             <div className="px-4 py-2 bg-white/40 backdrop-blur-xl text-black rounded-full font-black text-[9px] uppercase tracking-widest flex items-center gap-3 border border-white/40 shadow-xl">
@@ -517,10 +515,38 @@ export default function Home() {
                         )}
                         {unlockedMomentIds.includes(selectedMoment.id) && (
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
-                            <div className="flex items-center gap-3">
-                              <div className="px-4 py-1.5 bg-white text-black text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg">Unlocked</div>
-                              <span className="text-[10px] text-white/60 font-black uppercase tracking-widest">Digital asset revealed</span>
+                            <div className="flex flex-col gap-2">
+                              <div className="flex items-center gap-3">
+                                <div className="px-4 py-1.5 bg-cyan-500 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg">Access Granted</div>
+                                <span className="text-[10px] text-white font-black uppercase tracking-widest">Digital asset revealed</span>
+                              </div>
+                              <p className="text-[11px] text-white/80 font-medium uppercase tracking-tight leading-relaxed max-w-sm mt-2 blur-none">
+                                {selectedMoment.id === 'm3'
+                                  ? "¡Felicidades! Eres uno de los 20 participantes seleccionados. Tendrás la oportunidad de discutir ideas de Web3 en Antica Pizzeria con todo pagado."
+                                  : "Has desbloqueado el contenido exclusivo de este momento. Disfruta del acceso premium y prepárate para la experiencia."}
+                              </p>
                             </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Moment Description */}
+                      <div className="bg-white/50 border border-black/5 p-8 rounded-[2.8rem] space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/30">About this Moment</h4>
+                          <div className="flex items-center gap-2 px-3 py-1 bg-black/5 rounded-full">
+                            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                            <span className="text-[8px] font-black uppercase tracking-widest text-black/40">Exclusive</span>
+                          </div>
+                        </div>
+                        <p className="text-sm font-black text-black/80 uppercase tracking-tight leading-relaxed">
+                          {selectedMoment.description || "Inicia una experiencia única conectando con creadores y comunidad en tiempo real. Desbloquea para ver los detalles completos."}
+                        </p>
+                        {selectedMoment.tags && (
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            {selectedMoment.tags.map(tag => (
+                              <span key={tag} className="px-3 py-1 bg-black/5 rounded-full text-[8px] font-black text-black/30 uppercase tracking-widest">#{tag}</span>
+                            ))}
                           </div>
                         )}
                       </div>
@@ -655,7 +681,7 @@ export default function Home() {
           <BottomSheet
             isOpen={isMembershipOpen}
             onClose={() => setIsMembershipOpen(false)}
-            className="bg-white/90 backdrop-blur-3xl"
+            className="lg:w-[1000px] max-w-[95vw] bg-white/95 backdrop-blur-3xl"
           >
             <MembershipTiers onSubscribe={(tier) => {
               alert(`Subscribing to ${tier} tier...`);

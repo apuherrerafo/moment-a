@@ -2,6 +2,7 @@
 import { Search, MapPin, Sparkles, Target } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { twMerge } from 'tailwind-merge';
 
 interface SearchBarProps {
     onLocationSelect: (x: number, y: number, name: string) => void;
@@ -35,11 +36,17 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex-1 w-full">
             <motion.div
                 layout
-                className="bg-transparent overflow-hidden w-full transition-all"
-                initial={{ borderRadius: 40 }}
+                initial={{ borderRadius: '9999px' }}
+                animate={{
+                    borderRadius: isExpanded ? '48px' : '9999px',
+                }}
+                className={twMerge(
+                    "bg-white/40 backdrop-blur-2xl border border-white/20 shadow-2xl overflow-hidden w-full transition-all duration-500",
+                    isExpanded ? "bg-white/90" : ""
+                )}
             >
                 <div className="flex items-center lg:px-8 px-4 py-4 lg:py-6">
                     <div className={`w-6 h-6 flex items-center justify-center lg:mr-4 mr-2 transition-colors ${isExpanded ? 'text-black' : 'text-black/20'}`}>
