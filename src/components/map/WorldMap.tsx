@@ -32,6 +32,8 @@ export default function WorldMap({
   ];
 
   const [lastPinchDist, setLastPinchDist] = useState<number | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMoving, setIsMoving] = useState(false);
 
   useEffect(() => {
     if (focusLocation) {
@@ -43,6 +45,12 @@ export default function WorldMap({
     }
   }, [focusLocation]);
 
+  // Handle Mouse Move for Background Waves
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+    setIsMoving(true);
+  };
+
   // Handle Zoom Scroll (PC)
   const handleWheel = (e: React.WheelEvent) => {
     const delta = e.deltaY * -0.001;
@@ -50,8 +58,13 @@ export default function WorldMap({
     setScale(newScale);
   };
 
-  // Handle Pinch Zoom (Mobile)
+  // Handle Pinch Zoom & Waves (Mobile)
   const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setMousePos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+      setIsMoving(true);
+    }
+
     if (e.touches.length === 2) {
       const dist = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
@@ -68,12 +81,15 @@ export default function WorldMap({
 
   const handleTouchEnd = () => {
     setLastPinchDist(null);
+    setTimeout(() => setIsMoving(false), 1000);
   };
 
   return (
     <div
       className="relative w-full h-full bg-[#f8f9fa] overflow-hidden flex items-center justify-center touch-none"
       onWheel={handleWheel}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setIsMoving(false)}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
@@ -85,6 +101,40 @@ export default function WorldMap({
         {/* Animated Background Glows */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-100/30 blur-[150px] rounded-full animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-100/20 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+
+        {/* INTERACTIVE MOUSE WAVES (Ripple Effect) */}
+        <AnimatePresence>
+          {isMoving && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="pointer-events-none fixed inset-0 z-0"
+              style={{ left: 0, top: 0 }}
+            >
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute rounded-full border border-cyan-500/40 bg-cyan-500/5 shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+                  initial={{ width: 0, height: 0, opacity: 0.6, x: mousePos.x, y: mousePos.y }}
+                  animate={{
+                    width: 500,
+                    height: 500,
+                    opacity: 0,
+                    x: mousePos.x - 250,
+                    y: mousePos.y - 250
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    delay: i * 0.8,
+                    ease: "easeOut"
+                  }}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <motion.div
