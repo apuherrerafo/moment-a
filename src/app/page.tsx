@@ -17,6 +17,7 @@ import { ShoppingCart, Star, Gift, Crown, Info, Lock, Play, ChevronDown, Heart, 
 import ContactRoom from '@/components/ui/ContactRoom';
 import RaffleConsole from '@/components/ui/RaffleConsole';
 import LoginLauncher from '@/components/auth/LoginLauncher';
+import MembershipTiers from '@/components/ui/MembershipTiers';
 import { twMerge } from 'tailwind-merge';
 
 export default function Home() {
@@ -31,6 +32,7 @@ export default function Home() {
   const [isLiveOpen, setIsLiveOpen] = useState(false);
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const [isPostDetail, setIsPostDetail] = useState(false);
+  const [isMembershipOpen, setIsMembershipOpen] = useState(false);
 
   // Sidebar States
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
@@ -154,12 +156,9 @@ export default function Home() {
 
           {/* Header Controls - Improved for Mobile */}
           <div className="absolute top-6 lg:top-12 left-0 right-0 z-20 px-6 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-3 w-full max-w-2xl pointer-events-auto">
+            <div className="flex items-center gap-3 w-full max-w-xl pointer-events-auto">
               <div className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/20 rounded-full shadow-2xl overflow-hidden">
                 <SearchBar onLocationSelect={handleLocationSelect} />
-              </div>
-              <div className="flex-shrink-0">
-                <ProfileButton />
               </div>
             </div>
           </div>
@@ -193,6 +192,12 @@ export default function Home() {
                   "lg:translate-x-0",
                   isLeftSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                 )}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -50) setIsLeftSidebarOpen(false);
+                }}
+                animate={{ x: isLeftSidebarOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth < 1024 ? -300 : 0) }}
               >
                 <div className="h-full relative overflow-y-auto no-scrollbar">
                   <TrendingSorteos
@@ -202,6 +207,7 @@ export default function Home() {
                       setFocusLocation({ x: m.x, y: m.y });
                       setIsLeftSidebarOpen(false);
                     }}
+                    onStake={() => setIsMembershipOpen(true)}
                   />
                   <button
                     onClick={() => setIsLeftSidebarOpen(false)}
@@ -241,6 +247,12 @@ export default function Home() {
                   "xl:translate-x-0",
                   isRightSidebarOpen ? "translate-x-0" : "translate-x-full xl:translate-x-0"
                 )}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x > 50) setIsRightSidebarOpen(false);
+                }}
+                animate={{ x: isRightSidebarOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth < 1280 ? 320 : 0) }}
               >
                 <div className="h-full relative overflow-y-auto no-scrollbar">
                   <CommunityFeed
@@ -639,6 +651,17 @@ export default function Home() {
             onClose={() => setIsConsoleOpen(false)}
             moment={selectedMoment}
           />
+
+          <BottomSheet
+            isOpen={isMembershipOpen}
+            onClose={() => setIsMembershipOpen(false)}
+            className="bg-white/90 backdrop-blur-3xl"
+          >
+            <MembershipTiers onSubscribe={(tier) => {
+              alert(`Subscribing to ${tier} tier...`);
+              setIsMembershipOpen(false);
+            }} />
+          </BottomSheet>
         </motion.main>
       )}
     </AnimatePresence>

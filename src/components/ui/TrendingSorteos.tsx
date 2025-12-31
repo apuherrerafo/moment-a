@@ -7,9 +7,10 @@ import { Moment } from '@/hooks/useMoments';
 interface TrendingSorteosProps {
     sorteos: Moment[];
     onSelect: (m: Moment) => void;
+    onStake?: () => void;
 }
 
-export default function TrendingSorteos({ sorteos, onSelect }: TrendingSorteosProps) {
+export default function TrendingSorteos({ sorteos, onSelect, onStake }: TrendingSorteosProps) {
     return (
         <div className="flex flex-col h-full bg-transparent p-6 overflow-hidden">
             <div className="flex items-center justify-between mb-8">
@@ -78,7 +79,15 @@ export default function TrendingSorteos({ sorteos, onSelect }: TrendingSorteosPr
                     <Sparkles className="mb-4 opacity-40" size={24} />
                     <h4 className="text-xl font-black uppercase tracking-tighter leading-tight mb-2">Unlock Premium Creators</h4>
                     <p className="text-[9px] font-black text-white/50 uppercase tracking-widest leading-relaxed mb-6">Gain access to exclusive collections and early drops.</p>
-                    <button className="w-full py-3 bg-white text-cyan-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] shadow-xl hover:bg-black hover:text-white transition-all">STAKE NOW</button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onStake?.();
+                        }}
+                        className="w-full py-3 bg-white text-cyan-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] shadow-xl hover:bg-black hover:text-white transition-all"
+                    >
+                        STAKE NOW
+                    </button>
                 </div>
             </div>
 

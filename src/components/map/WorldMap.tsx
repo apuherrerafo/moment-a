@@ -30,6 +30,8 @@ export default function WorldMap({
     { radius: 45, opacity: 0.05, dash: "8 16" },
   ];
 
+  const [lastPinchDist, setLastPinchDist] = useState<number | null>(null);
+
   useEffect(() => {
     if (focusLocation) {
       setOffset({
@@ -40,8 +42,40 @@ export default function WorldMap({
     }
   }, [focusLocation]);
 
+  // Handle Zoom Scroll (PC)
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = e.deltaY * -0.001;
+    const newScale = Math.min(Math.max(0.3, scale + delta), 4);
+    setScale(newScale);
+  };
+
+  // Handle Pinch Zoom (Mobile)
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+
+      if (lastPinchDist !== null) {
+        const delta = (dist - lastPinchDist) * 0.01;
+        setScale(prev => Math.min(Math.max(0.3, prev + delta), 4));
+      }
+      setLastPinchDist(dist);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setLastPinchDist(null);
+  };
+
   return (
-    <div className="relative w-full h-full bg-[#f8f9fa] overflow-hidden flex items-center justify-center">
+    <div
+      className="relative w-full h-full bg-[#f8f9fa] overflow-hidden flex items-center justify-center touch-none"
+      onWheel={handleWheel}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Ecosystem Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-tr from-gray-100 via-white to-gray-50"></div>
@@ -82,13 +116,6 @@ export default function WorldMap({
             />
           ))}
         </svg>
-
-        {/* Central Core (User) */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
-          <div className="w-12 h-12 rounded-full bg-black shadow-2xl flex items-center justify-center border-4 border-white">
-            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-          </div>
-        </div>
 
         {/* Profiles / Ecosystem Inhabitants */}
         <AnimatePresence>
