@@ -45,8 +45,8 @@ export default function LoginLauncher({ onLoginSuccess }: LoginLauncherProps) {
             </div>
 
             {/* TOP BAR */}
-            <div className="absolute top-10 left-10 right-10 z-10 flex items-center justify-end pointer-events-none">
-                <div className="bg-black/90 backdrop-blur-xl px-10 py-5 rounded-full shadow-2xl flex items-center gap-4 border border-white/10 pointer-events-auto">
+            <div className="absolute top-6 lg:top-10 left-6 lg:left-10 right-6 lg:right-10 z-10 flex items-center justify-end pointer-events-none">
+                <div className="bg-black/90 backdrop-blur-xl px-6 lg:px-10 py-3 lg:py-5 rounded-full shadow-2xl flex items-center gap-4 border border-white/10 pointer-events-auto">
                     <span className="text-white font-black uppercase tracking-[0.5em] text-[11px]">moment-a</span>
                     <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] animate-pulse" />
                 </div>
@@ -60,28 +60,28 @@ export default function LoginLauncher({ onLoginSuccess }: LoginLauncherProps) {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
-                        className="relative z-10 w-full max-w-[480px] p-20 bg-white/30 backdrop-blur-[50px] border border-white/40 rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center text-center"
+                        className="relative z-10 w-full max-w-[480px] lg:p-20 p-8 m-4 bg-white/30 backdrop-blur-[50px] border border-white/40 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center text-center"
                     >
-                        <div className="w-32 h-32 mb-12 flex items-center justify-center relative">
+                        <div className="w-24 h-24 lg:w-32 lg:h-32 mb-8 lg:mb-12 flex items-center justify-center relative">
                             <div className="absolute inset-0 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-                            <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=peace&backgroundColor=b6e3f4" className="w-24 h-24 relative z-10 object-contain drop-shadow-2xl" alt="Logo" />
+                            <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=peace&backgroundColor=b6e3f4" className="w-20 h-20 lg:w-24 lg:h-24 relative z-10 object-contain drop-shadow-2xl" alt="Logo" />
                         </div>
 
-                        <div className="mb-8 px-4">
-                            <div className="flex items-center justify-center gap-2 mb-6">
+                        <div className="mb-6 lg:mb-8 px-4">
+                            <div className="flex items-center justify-center gap-2 mb-4 lg:mb-6">
                                 <Sparkles size={16} className="text-purple-600" />
                                 <span className="text-[10px] font-black text-black uppercase tracking-[0.15em]">
-                                    Donde los Creadores Conocen a su Comunidad
+                                    Comunidad & Creadores
                                 </span>
                             </div>
-                            <h1 className="text-3xl font-black text-black tracking-tight leading-[1.1] mb-6">
+                            <h1 className="text-2xl lg:text-3xl font-black text-black tracking-tight leading-[1.1] mb-6">
                                 Apoya a los Creadores,<br />
                                 Gana Premios Increíbles
                             </h1>
                         </div>
 
-                        <p className="text-black text-[11px] font-medium leading-relaxed mb-12 px-12 max-w-md">
-                            Únete a niveles de membresía exclusivos de tus creadores favoritos y obtén entradas automáticas a increíbles eventos de sorteos.
+                        <p className="text-black text-[11px] font-medium leading-relaxed mb-10 lg:mb-12 px-4 lg:px-12 max-w-md">
+                            Únete a niveles de membresía exclusivos de tus creadores favoritos y obtén entradas automáticas a sorteos.
                         </p>
 
                         <button
@@ -99,7 +99,7 @@ export default function LoginLauncher({ onLoginSuccess }: LoginLauncherProps) {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, x: -50 }}
-                        className="relative z-10 w-full max-w-[480px] p-20 bg-white/80 backdrop-blur-[50px] border border-white rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center"
+                        className="relative z-10 w-full max-w-[480px] lg:p-20 p-8 m-4 bg-white/80 backdrop-blur-[50px] border border-white rounded-[2.5rem] lg:rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center"
                     >
                         <h2 className="text-2xl font-black text-black uppercase tracking-tighter mb-10">Bienvenido</h2>
 
@@ -121,7 +121,7 @@ export default function LoginLauncher({ onLoginSuccess }: LoginLauncherProps) {
 
                         <button
                             onClick={() => setStep('welcome')}
-                            className="mt-8 text-white/20 text-[10px] font-black uppercase tracking-[0.2em] hover:text-white transition-colors"
+                            className="mt-8 text-black/30 text-[10px] font-black uppercase tracking-[0.2em] hover:text-black transition-colors"
                         >
                             Back to Start
                         </button>
@@ -133,9 +133,9 @@ export default function LoginLauncher({ onLoginSuccess }: LoginLauncherProps) {
                         key="login"
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="relative z-10 w-full max-w-[480px] p-20 bg-white/80 backdrop-blur-[50px] border border-white rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center"
+                        className="relative z-10 w-full max-w-[480px] lg:p-20 p-8 m-4 bg-white/80 backdrop-blur-[50px] border border-white rounded-[2.5rem] lg:rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] flex flex-col items-center"
                     >
-                        <h2 className="text-2xl font-black text-black uppercase tracking-tighter mb-10 self-start">Login</h2>
+                        <h2 className="text-2xl font-black text-black uppercase tracking-tighter mb-6 lg:mb-10 self-start">Login</h2>
 
                         <form onSubmit={handleLogin} className="w-full space-y-6">
                             <div className="space-y-2">

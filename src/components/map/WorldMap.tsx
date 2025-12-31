@@ -51,13 +51,13 @@ export default function WorldMap({
       </div>
 
       <motion.div
-        className="relative w-[200%] h-[200%] cursor-grab active:cursor-grabbing"
+        className="relative w-[300%] lg:w-[200%] h-[300%] lg:h-[200%] cursor-grab active:cursor-grabbing"
         drag
         dragMomentum={false}
         animate={{
           scale: scale,
-          x: offset.x - 200,
-          y: offset.y - 200
+          x: offset.x - (typeof window !== 'undefined' && window.innerWidth < 1024 ? 350 : 200),
+          y: offset.y - (typeof window !== 'undefined' && window.innerWidth < 1024 ? 350 : 200)
         }}
         transition={{ type: "spring", stiffness: 60, damping: 25 }}
       >

@@ -136,7 +136,7 @@ export default function Home() {
           initial={{ opacity: 0, filter: 'blur(20px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
           transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-          className="h-screen w-screen overflow-hidden relative font-sans p-6 text-black"
+          className="h-screen w-screen overflow-hidden relative font-sans lg:p-6 p-0 text-black"
         >
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
@@ -148,18 +148,20 @@ export default function Home() {
           </div>
 
 
-          {/* Search Bar - Outside main container */}
-          <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20 w-full max-w-md pointer-events-none">
-            <div className="pointer-events-auto">
-              <div className="bg-white/30 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl">
+          {/* Header Controls - Improved for Mobile */}
+          <div className="absolute top-6 lg:top-12 left-0 right-0 z-20 px-6 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-3 w-full max-w-2xl pointer-events-auto">
+              <div className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/20 rounded-full shadow-2xl">
                 <SearchBar onLocationSelect={handleLocationSelect} />
+              </div>
+              <div className="flex-shrink-0">
+                <ProfileButton />
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 h-full w-full"
-          >
-            <div className="h-full w-full bg-white/40 backdrop-blur-xl border border-white/20 rounded-[4rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.12)] flex overflow-hidden">
+          <div className="relative z-10 h-full w-full">
+            <div className="h-full w-full bg-white/40 backdrop-blur-xl lg:border border-none border-white/20 lg:rounded-[4rem] rounded-none shadow-[0_40px_100px_-20px_rgba(0,0,0,0.12)] flex overflow-hidden">
               <div className="hidden lg:block w-64 h-full border-r border-white/20 bg-white/30 backdrop-blur-md">
                 <TrendingSorteos
                   sorteos={moments}

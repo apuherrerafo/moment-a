@@ -41,9 +41,9 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
                 className="bg-transparent overflow-hidden w-full transition-all"
                 initial={{ borderRadius: 40 }}
             >
-                <div className="flex items-center px-8 py-6">
-                    <div className={`w-6 h-6 flex items-center justify-center mr-4 transition-colors ${isExpanded ? 'text-black' : 'text-black/20'}`}>
-                        <Search size={20} />
+                <div className="flex items-center lg:px-8 px-4 py-4 lg:py-6">
+                    <div className={`w-6 h-6 flex items-center justify-center lg:mr-4 mr-2 transition-colors ${isExpanded ? 'text-black' : 'text-black/20'}`}>
+                        <Search size={18} />
                     </div>
                     <input
                         type="text"
